@@ -1,4 +1,4 @@
-# RMF - RateMeasurementFrameworkDataUnion
+# RMF - RateMeasurementFramework
 The main features of the rmf are:
 - fast simultaneous measurements of delay, available data rate and loss rate in mobile cellular networks
 - it integrates a designated self-induced congestion detector and an optional second physical link to reduce feedback delays
