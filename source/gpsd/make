@@ -1,0 +1,9 @@
+#!/bin/bash
+
+g++-4.6 -Wall -pthread -std=c++0x	-c gpsdThreadbase.cpp	-o gpsdThreadbase.o -lgps 
+g++-4.6 -Wall -pthread 	-std=c++0x	-c mainGpsd.cpp 		-o mainGpsd.o 		-lgps 
+g++-4.6 -Wall 						-c gpsDate.cpp  		-o gpsDate.o
+
+g++-4.6 -Wall -pthread -o runGpsd mainGpsd.o gpsdThreadbase.o gpsDate.o -lgps
+
+rm *.o

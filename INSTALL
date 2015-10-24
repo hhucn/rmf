@@ -1,0 +1,94 @@
+Building the Rate Measurement Framework (RMF)
+=============================================
+
+
+Prerquesites:
+-------------
+- stlsoft >= 1.9.117
+- pantheios >= 1.0.1-beta214
+- google-perftools
+
+
+1) Installation of the logging framework prerequesites:
+=======================================================
+For convenience stlsoft verion 1.9.118-hdrs and pantheios 1.0.1-beta214 with pachtes for gcc 4.7 and 4.8 are included in the dependencies directory.
+Current versions can be downloaded at http://sourceforge.net/projects/pantheios/.
+
+1. Unpack them to directories of your liking (we will assume /opt/stlsoft and /opt/pantheios)
+
+2. Set environment Variables for pantheios in your shell (for example ~/.bashrc):
+	export STLSOFT=/opt/stlsoft
+	export PANTHEIOS_ROOT=/opt/pantheios
+
+3. Change to the pantheios build directory corresponding to your gcc version and architecture.
+   For 64-Bit x86 and gcc 4.8 this would be
+   cd /opt/pantheios/build/gcc48.unix.file64bit   
+
+4. If multiple g++ or gcc versions are installed and you do not want to use those invoked by gcc and g++ change the makefile in this directory from
+>
+########################################
+# tools
+
+CC                      =   gcc
+CPPC                    =   g++
+AR                      =   ar
+LD                      =   g++
+<
+
+to:
+
+<
+########################################
+# tools
+
+CC                      =   gcc-4.8
+CPPC                    =   g++-4.8 
+AR                      =   ar
+LD                      =   g++-4.8 
+<
+
+or (for 32 Bit cross compiles) to:
+
+>
+########################################
+# tools
+
+CC                      =   gcc-4.8 -m32
+CPPC                    =   g++-4.8 -m32
+AR                      =   ar
+LD                      =   g++-4.8 -m32
+<
+
+5. Build pantheios by
+   "make build" or (32-Bit cross compile) "linux32 make build"
+
+
+
+2) Building the RMF:
+--------------------
+1. Change to the directory this file is contained in.
+
+2. If you chose other paths for pantheois and stlsoft than /opt/pantheios and /pot/stlsoft change the variables 
+LOG_P and LOG_S in the Makefile correspondingly.
+
+3. If you changed the g++ call for panthois in 1.4) please alswo change the GPP variable in the Makefile.
+
+4. build the rmf binary by calling
+	"make", "make 64-bit" or "make 32-bit"
+
+5. the rmf binary now should be located at binary/rmf
+
+
+3) Building and loading the Kernel Module:
+------------------------------------------
+1. make sure you have installed the kernel headers of your currently used header
+
+2. go to source/queueReadModule
+
+3. call "make"
+
+4. the kernel module can be load by 
+   "insmod queueLength.ko deviceName=DEVNAME"
+   where DEVNAME is the name of the device to monitor
+
+
