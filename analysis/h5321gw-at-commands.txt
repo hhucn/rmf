@@ -1,0 +1,655 @@
+AT+CLAC
+AT*
+AT&C
+AT+CACM
+AT+CAMM
+AT+CBST
+AT+CCHC
+AT+CCHO
+AT+CCLK
+AT+CCWE
+AT+CEAP
+AT+CEER
+AT+CERP
+AT+CFUN
+AT+CGACT
+AT+CGATT
+AT+CGCLASS
+AT+CGCMOD
+AT+CGDCONT
+AT+CGEQMIN
+AT+CGEQNEG
+AT+CGEQREQ
+AT+CGEREP
+AT+CGLA
+AT+CGMI
+AT+CGMM
+AT+CGMR
+AT+CGPADDR
+AT+CGQMIN
+AT+CGQREQ
+AT+CGREG
+AT+CGSMS
+AT+CGSN
+AT+CGTFTRDP
+AT+CHSU
+AT+CIMI
+AT+CIND
+AT+CLAC
+AT+CLCK
+AT+CMEC
+AT+CMEE
+AT+CMER
+AT+CMGC
+AT+CMGD
+AT+CMGF
+AT+CMGL
+AT+CMGR
+AT+CMGS
+AT+CMGW
+AT+CMMS
+AT+CMOLR
+AT+CMOLRE
+AT+CMSS
+AT+CMUX
+AT+CNMI
+AT+CNUM
+AT+COPN
+AT+COPS
+AT+CPBF
+AT+CPBR
+AT+CPBS
+AT+CPBW
+AT+CPIN
+AT+CPMS
+AT+CPOL
+AT+CPUC
+AT+CPWD
+AT+CR
+AT+CRC
+AT+CREG
+AT+CRES
+AT+CRLA
+AT+CRLP
+AT+CRSM
+AT+CSAS
+AT+CSCA
+AT+CSCB
+AT+CSCS
+AT+CSMS
+AT+CSQ Signal Quality Indicator
+AT+CUAD
+AT+CUSD
+AT&D
+ATE
+AT*E2ARMEOPM
+AT*E2CFUN
+
+AT*E2CFUN?
+*E2CFUN: 0,1,0
+
+OK
+
+AT*E2CHAN
+
+AT*E2CHAN?
+*E2CHAN: 0,0,0,1,10786
+
+OK
+
+AT*E2GPSCLM
+AT*E2GPSCTL
+AT*E2GPSEPH
+AT*E2GPSLOC
+AT*E2GPSNPD
+AT*E2GPSPOS
+AT*E2GPSQUALITY
+AT*E2GPSSTAT
+AT*E2GPSSUPL
+AT*E2GPSSUPLNI
+AT*E2GPSSUPLNIREPLY
+AT*E2GPSTIME
+AT*E2IPCFGE
+AT*E2NAP
+
+AT*E2NAP?
+*E2NAP: 0,0
+
+OK
+
+
+AT*E2OTR
+
+AT*E2OTR?
+*E2OTR: 0,75,80,85,1,46
+
+OK
+
+AT*E2REG
+
+AT*E2REG?
+*E2REG: 0,5,5
+
+OK
+
+AT*E2RESET
+AT*EATTM
+
+AT*EATTM?
+*EATTM: 0
+
+OK
+
+AT*ECSP E
+AT*EECUST
+
+AT*EECUST
+Module Customization..... Lenovo
+Cust. Product............ CXC 173 1938/83
+Cust. Revision........... R1G04
+Specific Module Customization:
+# USB Product ID (PID) quick enum: 0x1927
+# USB Vendor name quick enum: Lenovo
+# USB Product ID (PID) full enum: 0x1926
+# USB Vendor name full enum: Lenovo
+# Customer ID: Lenovo
+# USB Network Adapter Interface Alias: Ericsson H5321 gw
+# USB Network Adapter Interface Alias: Ericsson H5321 gw
+# USB Network Adapter Interface Alias: Ericsson H5321 gw
+# Antenna Band State 00: LTE17
+# Antenna Band State 01: LTE13
+# Antenna Band State 10: LTE20,GSM850,WCDMA5,WCDMA6
+# Antenna Band State 11: GSM900,GSM1800,GSM1900,WCDMA1,WCDMA2,WCDMA8
+# Tunable Antenna default start up state: 11
+ 
+Network Customization.... Telefonica;26207
+Config. Set Product...... CXP 901 8699/1
+Config. Set Revision..... R3C18
+Specific Network Customization:
+# Roaming Broker Enabled 
+# User preferred MS operation mode at Startup is CS only
+# Special Class 0 handling is Enabled
+# If no NW name can be deduced elsewise, report PLMN as NW name Disabled (report null)
+ 
+
+OK
+
+AT*EEGPSEECLM
+AT*EEGPSEEDATA
+AT*EEGPSEESTAT
+AT*EEGPSNMEA
+AT*EEMAPPSETTING E
+AT*EEMENABLETX E
+AT*EEMSOSDESC
+
+AT*EEMSOSDESC?
+*EEMSOSDESC: 0
+
+OK
+
+
+AT*EEPOWRED
+
+AT*EEPOWRED?
+*EEPOWRED: 0,0,1,0,2,0,3,0,4,0,201,0,202,0,205,0,208,0
+
+OK
+
+AT*EERPOL
+
+AT*EERPOL?
+*EERPOL: 4
+
+OK
+
+AT*EESIMSWAP
+
+AT*EESIMSWAP?
+*EESIMSWAP: 0,1
+
+OK
+
+
+AT*EETIME
+
+AT*EETIME?
+2015/08/24,14:01:35 UTC (source:NITZ)
+
+OK
+
+
+AT*EEVINFO
+
+AT*EEVINFO
+*EEVINFO:
+Model.................... H5321 gw
+IMEI Data................ 359001043497069
+SVN...................... 02
+Serial Number............ C3700730Y6
+Product Number........... KRD 131 21/822
+Revision................. R1A
+FW Product............... CXC 173 1944/1
+FW Version............... R3C11
+FW Build Date/Time....... Jul 10 2012 22:26:03
+Cust. Product............ CXC 173 1938/83 Page: 
+Cust. Version............ R1G04
+Customization Descr...... Lenovo
+Format................... 1
+Base Product Number...... 1/KRD 131 21/8
+Base Product Revision.... R2D
+SIMLock Deployment....... 0.0
+SIMLock Description...... Unlocked
+SIMLock Product.......... CXC 173 0839/01
+SIMLock Revision......... R1F
+Model Description........ H5321 gw Mobile Broadband Module
+Vendor Name.............. Lenovo
+Config. Set Product...... CXP 901 8699/1
+Config. Set Revision..... R3C18
+Network Customization.... Telefonica;26207
+Customization State...... 1
+NDFU Page................ 1
+Configuration Product.... CXP 901 8700/1
+Configuration Revision... R3C18
+Protocol FW Product...... CXC 173 1944/1
+Protocol FW Version...... R3C11
+Application FW Product... CXC 173 1945/1
+Application FW Version... R3C18
+
+OK
+
+
+AT*EFDORM
+
+AT*EFDORM
+OK
+
+
+AT*EGNCI 
+ * GSM Network Neighborhood Cell IDs laut https://github.com/aferre/u300-ril/blob/master/u300-ril-network.c
+
+AT*EGPSSAT
+AT*EGSCI GSM Serving Cell????
+AT*EIAAUR E
+AT*EIAAUW E
+AT*EIAC
+
+AT*EIAC?
+*EIAC: 1,1,"PS Account 1"
+
+OK
+
+
+AT*EIAD ERROR
+AT*EIAIPCPR
+AT*EIAIPCPW
+AT*EIAPSR
+AT*EIAPSW ERROR
+AT*EIAR ERROR
+AT*EIAW ERROR
+AT*EMIBRR
+
+AT*EMIBRR?
+*EMIBRR: 0,3
+
+OK
+
+
+AT*EMRDY
+
+AT*EMRDY?
+*EMRDY: 1
+
+OK
+
+AT*ENAP
+
+AT*ENAP?
+*ENAP:0,""
+
+OK
+
+AT*ENNIR
+
+AT*ENNIR?
+*ENNIR: 0
+
+OK
+
+
+AT*EPBR ERROR
+AT*EPBW ERROR
+AT*EPEE
+
+AT*EPEE?
+*EPEE: 0
+
+OK
+
+
+AT*EPHD
+
+AT*EPHD?
+*EPHD: 0,0
+
+OK
+
+
+AT*EPIN
+
+AT*EPIN?
+*EPIN: 3,10,0,10,260,260,260,260,260
+
+OK
+
+
+AT*EPSB
+
+AT*EPSB?
+*EPSB: 0,0
+
+OK
+
+
+AT*ERINFO
+
+AT*ERINFO?
+*ERINFO: 0,0,2
+
+OK
+
+AT*ESIM
+
+AT*ESIM?
+*ESIM:0,0
+
+OK
+
+
+AT*ESIMSR
+
+AT*ESIMSR?
+*ESIMSR: 0
+
+OK
+
+
+AT*ESTKIDLSCR
+
+AT*ESTKIDLSCR?
+*ESTKIDLSCR: 0
+
+OK
+
+AT*ESTKMENU
+AT*ESTKRES ERROR
+AT*ESTKSAT
+*ESTKS?
+*ESTKS: 0
+
+OK
+
+AT*ESTKUSRACT
+*ESTKUSRACT: 0
+
+OK
+
+AT*ETCHF96
+OK
+
+AT*ETZR?
+*ETZR: 0
+
+OK
+
+AT*EWNCI  * WCDMA Network Neighborhood Cell IDs laut
+https://github.com/aferre/u300-ril/blob/master/u300-ril-network.c
+/* UARFCN */
+            err = at_tok_nextint(&line, &uarfcn);
+            if (err < 0)
+                goto error;
+
+            /* PSC */
+            err = at_tok_nextint(&line, &psc);
+            if (err < 0)
+                goto error;
+
+            /* RSCP */
+            err = at_tok_nextint(&line, &rscp);
+            if (err < 0)
+                goto error;
+
+            /* ECNO */
+            err = at_tok_nextint(&line, &ecno);
+            if (err < 0)
+                goto error;
+
+            /* PathLoss */
+            err = at_tok_nextint(&line, &pathloss);
+            if (err < 0)
+                goto error;
+
+OK
+
+
+AT*EWNCI
+*EWNCI: 10738,55,13,18,158
+*EWNCI: 10738,407,10,10,158
+*EWNCI: 10738,501,10,11,158
+
+
+AT*EWSCI
+*EWSCI: 10786,496,32,36,46
+
+OK
+
+
+AT&F
+AT+GCAP
+AT+GMI Brand
+AT+GMM Modem Name
+AT+GMR Modem Revision
+ATH
+ATI Gleiche wie AT+GMM
+AT+PACSP
+AT*STKC
+AT*STKE
+AT*STKR
+ATV
+AT&W
+ATZ
+AT
+
+
+######### für H5321gw
+
+
+AT+CREG?
++CREG: 0,1
+
+OK
+AT+GMM
+H5321 gw
+
+OK
+AT+GMR
+R3C11
+
+OK
+AT+GMI
+Lenovo
+
+OK
+AT+GCAP
++GCAP: +CGSM, +DS
+
+OK
+
+AT*ESTKS?
+*ESTKS: 0
+
+AT*ESTKMENU?
+*ESTKMENU: : 0053004D0053002000530065007200760069006300650073,1,4
+1,0049006E0066006F002000530065007200760069006300650073,1
+2,005700F600720074006500720062007500630068,1
+3,0045004D00610069006C,1
+4,004600610078,1
+
+
+OK
+
+AT*ESTKIDLSCR?
+*ESTKIDLSCR: 0
+
+OK
+
+
+
+
+
+/**
+ * Get network identity (MCC/MNC) of the Home network.
+ *
+ * \param mcc: [out] MCC value.
+ * \param mnc: [out] MNC value.
+ * \return Negative value indicates failure.
+ */
+ int getHomeNetworkIdentity(int *mcc, int *mnc)
+{
+    char *tok, *mcc_mnc, *end;
+    ATResponse *atresponse = NULL;
+    int status = 0;
+
+    status = at_send_command_singleline("AT*EHNET=2", "*EHNET", &atresponse);
+
+
+
+ /**
+ * Get network identity (MCC/MNC) of the Attached network.
+ *
+ * \param mcc: [out] MCC value.
+ * \param mnc: [out] MNC value.
+ * \return Negative value indicates failure.
+ */
+int getAttachedNetworkIdentity(int *mcc, int *mnc)
+{
+    char *tok, *mcc_mnc, *end;
+    ATResponse *atresponse = NULL;
+    int status = 0;
+
+    status = at_send_command_singleline("AT+COPS=3,2;+COPS?", "+COPS:",
+                                        &atresponse);
+
+
+                        /**
+ * RIL_REQUEST_SET_NETWORK_SELECTION_AUTOMATIC
+ *
+ * Specify that the network should be selected automatically.
+ */
+void requestSetNetworkSelectionAutomatic(void *data, size_t datalen,
+                                         RIL_Token t)
+{
+    int err = 0;
+    struct operatorPollParams *poll_params = NULL;
+
+    err = at_send_command("AT+COPS=0", NULL);                
+
+
+
+
+  /*
+     * AT+CIND will give indication on what signal strength we got both for
+     * GSM and WCDMA.
+     * Android calculates rssi and dBm values from this value, so the dBm
+     * value presented in android will be wrong, but this is an error on
+     * android's end.
+     */
+#ifndef LTE_COMMAND_SET_ENABLED
+    err = at_send_command_singleline("AT+CIND?", "+CIND:", &atresponse);
+    if (err < 0 || atresponse->success == 0)
+        goto error;
+
+    line = atresponse->p_intermediates->line;
+
+    if (!parseSignalStrength(line, p_signalStrength))
+        goto error;
+
+
+
+
+
+laut http://m2msupport.net/m2msupport/general-at-commands/
+
+AT+CIND command returns a short description of the purpose of the indictors and teh supported values for each indicator.
+AT+CIND=?
++CIND: (“battchg”,(0-5)),(“signal”,(0-5)),(“service”,(0-1)),(“call”,(0-1)),(“roam”,(0-1)),(“smsfull”,(0-1)),(“GPRS coverage”,(0-1)),(“callsetup”,(0-3))
+OK
+
+
+
+To check the registration status of the device,
+AT+CGREG?
++CGREG: 0,1
+OK
+
+‘+CGREG:0,1′ implies that the device is registered and it is in the nime network (ie not roaming)
+
+Results of network registration status commans,
+0,0 – not registered, MT is not currently searching a new operator to register to
+0,1 – Registered, home network
+0,2 – Searching
+0,3 – Registration denied
+0,5 – Registered, non-home network
+
+Enable unsolicited result code for registration.
+AT+CGREG=1 –> Registration status only
+OK
+
+AT+CGREG=2 –> Registration status and service location area and cell
+OK
+Keywords: Module Network Registration, M2M Network Registration, GPRS Network Registration, 3G Network Registration, Network Registration through AT commands, 
+
+
+
+//Get the GPRS class supported by the module
+AT+CGCLASS?
+
++CGCLASS: “A”
+
+OK
+
+
+
+
+//Get the IP address of the connected PDP context
+AT+CGPADDR= 1
+
++CGPADDR: 1,”"
+
+OK
+IP Address of the connected profile is “”
+
+
+at+creg Abfrage des Netzwerkstatus des Telefons
+	at+creg=n 	
+
+n T> erzeugt einen der nachgenannten Effekte:
+0 	keine Meldungen bei Änderung des Netzwerkstatus oder der Einbuchung (default)
+1 	Meldung bei Änderung des Netzwerkstatus in der Form +CREG: x
+2 	Meldung bei Änderung des Netzwerkstatus oder der aktuell gewählten Zelle in der Form +CREG: x,la,ci
+S10 : nicht implementiert
+at+creg? 	
+
+gibt den Wert von n und den aktuellen Netzwerkstatus sowie bei Status 1 oder 5 Informationen zur aktuell gewählten Zelle aus, etwa
+at+creg? +CREG: 0,1,02D0,416F bedeutet: Meldungen werden nicht ausgegeben, Status ist 1, eingebucht im Heimatnetz in LA 02D0, dort aktuell gewählte Zelle 416F. Als Status wird zurückgemeldet:
+0 	nicht eingebucht, keine Netzsuche
+1 	eingebucht, Heimatnetz
+2 	nicht eingebucht, Netzsuche
+3 	nicht eingebucht, Einbuchung abgelehnt
+4 	Status unbekannt
+5 	eingebucht, Fremdnetz
+
+
+
+AT+CFUN=5 nur GSM
+AT+CFUN=1 automatik
+AT+CFUN=6 WCDMA Only
