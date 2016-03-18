@@ -52,8 +52,10 @@ class NodeLogs:
 
 	def readFromLogFile(self,suffix,skipHeader):
 		'''Read the numpy Array from directory+self.role+suffix'''
+		#print('Reading logfile '+self.directory+'/'+self.role+suffix)
+		#npArray = np.genfromtxt(self.directory+'/'+self.role+suffix, dtype=None, delimiter=',', names=True, skip_header=skipHeader) 
 		print('Reading logfile '+self.directory+'/'+self.role+suffix)
-		npArray = np.genfromtxt(self.directory+'/'+self.role+suffix, dtype=None, delimiter=',', names=True, skip_header=skipHeader) 
+		npArray = np.genfromtxt(self.role+suffix, dtype=None, delimiter=',', names=True, skip_header=skipHeader) 
 		if self.DEBUG: print npArray.dtype.names
 		return npArray
 
@@ -129,8 +131,10 @@ class NodeLogs:
 
 	def getStreamData(self,sender,overwrite=False):
 		'''returns the chirp properties of all chirps send by sender and received by self'''
-		streamFilename = self.directory+'/'+self.streamDataFilename
-		statisticsFilename = self.directory+'/'+self.statisticDataFilename
+		#streamFilename = self.directory+'/'+self.streamDataFilename
+		#statisticsFilename = self.directory+'/'+self.statisticDataFilename
+		streamFilename = self.streamDataFilename
+		statisticsFilename = self.statisticDataFilename
 		if self.streamData.size == 0 or overwrite:
 			if os.path.isfile(streamFilename) and not overwrite:
 				print('Reading logfile '+streamFilename)
@@ -151,8 +155,10 @@ class NodeLogs:
 
 	def getStatistics(self,sender,overwrite=False):
 		'''returns the statistics for all packets send by sender and received by self'''
-		streamFilename = self.directory+'/'+self.streamDataFilename
-		statisticsFilename = self.directory+'/'+self.statisticDataFilename
+		#streamFilename = self.directory+'/'+self.streamDataFilename
+		#statisticsFilename = self.directory+'/'+self.statisticDataFilename
+		streamFilename = self.streamDataFilename
+		statisticsFilename = self.statisticDataFilename
 		if self.statistics.size == 0 or overwrite:
 			if os.path.isfile(statisticsFilename) and not overwrite:
 				print('Reading logfile '+statisticsFilename)
@@ -392,7 +398,8 @@ class NodeLogs:
 
 	def getGpsData(self,sender):
 		'''returns the chirp properties of all chirps send by sender and received by self'''
-		outfilename = self.directory+'/'+self.streamDataFilename
+		#outfilename = self.directory+'/'+self.streamDataFilename
+		outfilename = self.streamDataFilename
 		if self.streamData.size == 0:
 			if os.path.isfile(self.directory+'/'+POSITION_LOG_FILE):
 				print('Reading logfile '+outfilename)
@@ -406,8 +413,10 @@ class NodeLogs:
 		return self.streamData
 
 	def convertGpsdlogToCsv(self):
-		filename = self.directory+"/"+GPSD_LOG_FILE
-		filenameout = self.directory+"/"+POSITION_LOG_FILE
+		#filename = self.directory+"/"+GPSD_LOG_FILE
+		#filenameout = self.directory+"/"+POSITION_LOG_FILE
+		filename = GPSD_LOG_FILE
+		filenameout = POSITION_LOG_FILE
 		split = []
 		positiondata = []
 		with open(filename,'r') as f:

@@ -11,6 +11,7 @@ class BothLogs:
 	def __init__(self, directory, DEBUG=False, maxUpstreamBytes=5760000/8, maxDownStreamBytes=21000000/8):
 	#def __init__(self, directory, DEBUG=False, maxUpstreamBytes=5760000/8, maxDownStreamBytes=7200000/8):
 	#def __init__(self, directory, DEBUG=False, maxUpstreamBytes=2000000/8, maxDownStreamBytes=7200000/8):
+		print 'cwd in init = ',os.getcwd()
 		self.directory = directory
 		self.DEBUG=DEBUG
 		os.chdir(directory)
@@ -22,7 +23,8 @@ class BothLogs:
 		self.statisticsFilename = 'stats.csv'
 
 	def getMaxUpMaxDown(self):
-		filename = self.directory+"/client.log"
+		#filename = self.directory+"/client.log"
+		filename = "client.log"
 		# [rmf.1, Sep 07 07:51:25.735; Notice]: MEME| -> Sent message to server: "MEASURE_TBUS_SYNC|0|1|1|42|50|3|25|20000|20000|20000|2625000|720000|0|0|/dev/ttyS0|2947|"
 		# #[rmf.1, Sep 07 07:51:25.735; Informational]: MEME| -> Found maximal datarate for the download = 2625000[Byte/s]
 		#[rmf.1, Sep 07 07:51:25.735; Informational]: MEME| -> Found maximal datarate for the upload = 720000[Byte/s]
@@ -35,6 +37,7 @@ class BothLogs:
 		maxup=0
 		maxupfound=False
 
+		print 'cwd in getMaxUpMaxDown = ',os.getcwd()
 		with open(filename) as f:
 		    line = f.readline()
 		    while line and not (maxdownfound and maxupfound):
@@ -68,7 +71,8 @@ class BothLogs:
 		return
 
 	def getStatistics(self,overwrite=False):
-		outfilename = self.directory+'/'+self.statisticsFilename
+		#outfilename = self.directory+'/'+self.statisticsFilename
+		outfilename = self.statisticsFilename
 		if self.statistics.size == 0 or overwrite:
 			if os.path.isfile(outfilename) and not overwrite:
 				print('Reading logfile '+outfilename)

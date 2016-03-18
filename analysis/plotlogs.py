@@ -141,10 +141,9 @@ def multiplot(directory,DEBUG=False,RECALC=False):
 	plotSendingRate(sub[0],streamdata,'Downstream sending rate')
 	plotDelay(sub[1],streamdata , 'Downstream delay')
 	plotTGap(sub[2],streamdata , 'Downstream t_gap_i')
-	plotTtxFirst(sub[2].twinx(),streamdata , 'TTX First')
+	#plotTtxFirst(sub[2].twinx(),streamdata , 'TTX First')
 	plotIndividualPacketDelays(sub[3], logs.client.getmReceiverRawData(),' Downstream individual packet delays')
 	plotNumberOfSendPackets(sub[3].twinx(), streamdata,'Downstream send packets')
-
 
 	#upstream
 	fig2, sub = plt.subplots(4, sharex=True)
@@ -157,7 +156,7 @@ def multiplot(directory,DEBUG=False,RECALC=False):
 	plotSendingRate(sub[0],streamdata,'Downstream sending rate')
 	plotDelay(sub[1],streamdata , 'Upstream delay')
 	plotTGap(sub[2],streamdata , 'Upstream t_gap_i')
-	plotTtxFirst(sub[2].twinx(),streamdata , 'TTX First')
+	#plotTtxFirst(sub[2].twinx(),streamdata , 'TTX First')
 	plotIndividualPacketDelays(sub[3], logs.server.getmReceiverRawData(),'Upstream individual packet delays')
 	plotNumberOfSendPackets(sub[3].twinx(), streamdata,'Upstream send packets')
 	plt.grid()
@@ -176,12 +175,12 @@ directories = []
 
 
 
-# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150907/072020') # D1 21mbit - long and really great (but again a negative 800ms t_gap - I guess my script is wrong somewhere)
-# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150907/075124') # D1 21mbit - short but perfect
-# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/183536') # D1 21mbit - what the hack -  minus 7s t_gap in downstream? out of order?
-# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/184349') # D1 21mbit - short but perfec
-# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/214302') # D1 21mbit - seems like perfect rubbish to me - invalid timesync and duplicate packets in dthe downstream?
-# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/215435') # D1 21mbit - great performance but one enourmous sending rate spike (with no impact) in the downstream plot
+# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150907/072020') # Allerheiligen -> Frdierichstadt - D1 21mbit - long and really great (but again a negative 800ms t_gap - I guess my script is wrong somewhere)
+# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150907/075124') # Fridrichstadt -> Wehrhahn - D1 21mbit - short but perfect
+# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/183536') # Allerheiligen -> Uedesheim - D1 21mbit - what the hack -  minus 7s t_gap in downstream? out of order?
+# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/184349') # Uedeseim -> Wendersplatz - D1 21mbit - short but perfec
+# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/214302') # Wendersplatz -> Europadamm (sehr kurz) - D1 21mbit - seems like perfect rubbish to me - invalid timesync and duplicate packets in dthe downstream?
+# directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/215435') # Koelner Strasse Neuss ueber Schlicherum und Rosellen nach Allerheiligen - D1 21mbit - great performance but one enourmous sending rate spike (with no impact) in the downstream plot
 
 
 #both quite good
@@ -452,46 +451,46 @@ directories = []
 #plt.xkcd()
 
 def usage():
-  print "test.py -i <inputdir> [-d -r]"
-  print "        -i inputdirectory with rmf logs (can be used multiple times)"
-  print "        -r recalc everything"
-  print "        -d use default directory as input"
+	print "test.py -i <inputdir> [-d -r]"
+	print "        -i inputdirectory with rmf logs (can be used multiple times)"
+	print "        -r recalc everything"
+	print "        -d use default directory as input"
 
 def main(argv):
-  directories=[]
-  recalcall = False
-  usedefault = False
+	directories=[]
+	recalcall = False
+	usedefault = False
 
-  try:
-    opts, args = getopt.getopt(argv,"hi:dr",["inputdir="])
-  except getopt.GetoptError:
-    usage()
-    sys.exit(2)
-  for opt, arg in opts:
-    if opt == "-h":
-      usage()
-      sys.exit()
-    elif opt in ("-i", "--inputdir"):
-      directories.append(arg)
-    elif opt == "-r":
-      recalcall = True
-    elif opt == "-d":
-      usedefault = True
-  if usedefault:
-    directories=[]
-    directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/215435') # D1 21mbit - great performance but one enourmous sending rate spike (with no impact) in the downstream plot
+	try:
+		opts, args = getopt.getopt(argv,"hi:dr",["inputdir="])
+	except getopt.GetoptError:
+		usage()
+		sys.exit(2)
+	for opt, arg in opts:
+		if opt == "-h":
+			usage()
+			sys.exit()
+		elif opt in ("-i", "--inputdir"):
+			directories.append(arg)
+		elif opt == "-r":
+			recalcall = True
+		elif opt == "-d":
+			usedefault = True
+	if usedefault:
+		directories=[]
+		directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/215435') # D1 21mbit - great performance but one enourmous sending rate spike (with no impact) in the downstream plot
 
-  print "Inputdirectories = ", directories
-  print "Recalcall = ",recalcall
-  print "usedfault = ", usedefault
-  print "\n"
+	print "Inputdirectories = ", directories
+	print "Recalcall = ",recalcall
+	print "usedfault = ", usedefault
+	print "\n"
 
-  for directory in directories: 
-  	print 'Generating plot for dir = '+directory
-  	multiplot(directory,False,True)
-  #plt.ioff()
-  plt.show()
-  print "Finished"
+	for directory in directories: 
+		print 'Generating plot for dir = '+directory
+		multiplot(directory,False,True)
+	#plt.ioff()
+	plt.show()
+	print "Finished"
 if __name__ == "__main__":
 	main(sys.argv[1:])
 
