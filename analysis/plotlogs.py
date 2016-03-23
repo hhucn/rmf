@@ -6,6 +6,11 @@ import bothlogs
 import matplotlib.pyplot as plt
 import time
 import getopt,sys
+import os
+
+from pylab import rcParams
+rcParams['figure.figsize'] = 10, 10
+
 
 NORMALIZE = 0
 BILLION = 1000000000.0
@@ -21,29 +26,29 @@ def normalize(what):
 	return (what - NORMALIZE)
 
 def plotDatarateAndLossrate(subplot,streamdata, title, how=HOW):
-	if how==TYPE_TRX:     subplot.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['data_rate_Bytes']/1000,'y', label='Data rate vs. trx'  ,drawstyle='steps-post')
-	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['data_rate_Bytes']/1000,'y', label='Data rate vs. ttx'  ,drawstyle='steps-post')
-	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,streamdata['data_rate_Bytes']/1000,'y', label='Data rate vs. chirp',drawstyle='steps-post')
-	subplot.set_title(title)
-	subplot.set_ylabel('Data rate [KByte/s]')
+	if how==TYPE_TRX:     subplot.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['data_rate_Bytes']/1000,'b', label='Data rate vs. trx'  ,drawstyle='steps-post',linewidth=1)
+	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['data_rate_Bytes']/1000,'b', label='Data rate vs. ttx'  ,drawstyle='steps-post',linewidth=1)
+	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,streamdata['data_rate_Bytes']/1000,'b', label='Data rate vs. chirp',drawstyle='steps-post',linewidth=1)
+	#subplot.set_title(title)
+	subplot.set_ylabel('Data rate [KByte/s]', color='b')
 	subplot.legend(loc=2)
 	subplot.grid(True)
 
 	righty = subplot.twinx()
 	righty.set_ylabel('Loss rate [%]', color='r')
-	if how==TYPE_TRX:     righty.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['loss_rate'],'r', label='Loss rate vs. trx'  ,drawstyle='steps-post')
-	elif how==TYPE_TTX:   righty.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['loss_rate'],'r', label='Loss rate vs. ttx'  ,drawstyle='steps-post')
-	elif how==TYPE_CHIRP: righty.plot(          (streamdata['chirp']       )         ,streamdata['loss_rate'],'r', label='Loss rate vs. chirp',drawstyle='steps-post')
+	if how==TYPE_TRX:     righty.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['loss_rate'],'r', label='Loss rate vs. trx'  ,drawstyle='steps-post',linewidth=1)
+	elif how==TYPE_TTX:   righty.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['loss_rate'],'r', label='Loss rate vs. ttx'  ,drawstyle='steps-post',linewidth=1)
+	elif how==TYPE_CHIRP: righty.plot(          (streamdata['chirp']       )         ,streamdata['loss_rate'],'r', label='Loss rate vs. chirp',drawstyle='steps-post',linewidth=1)
 	righty.set_ylim([0,100])
 	righty.legend(loc=1)
 	return
 
 def plotDelay(subplot,streamdata,title,how=HOW):
-	if how==TYPE_TRX:     subplot.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['delay_s']*1000,'y', label='Delay vs. trx'  ,drawstyle='steps-post')
-	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['delay_s']*1000,'y', label='Delay vs. ttx'  ,drawstyle='steps-post')
-	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,streamdata['delay_s']*1000,'y', label='Delay vs. chirp',drawstyle='steps-post')
-	subplot.set_title(title)
-	subplot.set_ylabel('Delay [ms]')
+	if how==TYPE_TRX:     subplot.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['delay_s']*1000,'r', label='Delay vs. trx'  ,drawstyle='steps-post',linewidth=1)
+	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['delay_s']*1000,'r', label='Delay vs. ttx'  ,drawstyle='steps-post',linewidth=1)
+	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,streamdata['delay_s']*1000,'r', label='Delay vs. chirp',drawstyle='steps-post',linewidth=1)
+	#subplot.set_title(title)
+	subplot.set_ylabel('Delay [ms]', color='r')
 	subplot.legend(loc=2)
 	subplot.grid(True)
 	return
@@ -52,29 +57,47 @@ def plotTtxFirst(subplot,streamdata,title,how=HOW):
 	if how==TYPE_TRX:     subplot.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['first_ttx_ns'],'y', label='Delay vs. trx'  )
 	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['first_ttx_ns'],'y', label='Delay vs. ttx'  )
 	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,streamdata['first_ttx_ns'],'y', label='Delay vs. chirp')
-	subplot.set_title(title)
+	#subplot.set_title(title)
 	subplot.set_ylabel('ttx first [ns]')
 	subplot.legend(loc=2)
 	subplot.grid(True)
 	return
 
 def plotTGap(subplot,streamdata,title,how=HOW):
-	if how==TYPE_TRX:     subplot.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['t_gap_i_s']*1000,'r.', label='t_gap_i vs. trx')
-	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['t_gap_i_s']*1000,'r.', label='t_gap_i vs. ttx')
-	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,streamdata['t_gap_i_s']*1000,'r.', label='t_gap_i vs. chirp')
-	subplot.set_title(title)
-	subplot.set_ylabel('t_gap_i [ms]')
+	if how==TYPE_TRX:     subplot.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['t_gap_i_s']*1000,'g.', label='t_gap_i vs. trx'  ,markersize=2)
+	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['t_gap_i_s']*1000,'g.', label='t_gap_i vs. ttx'  ,markersize=2)
+	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,streamdata['t_gap_i_s']*1000,'g.', label='t_gap_i vs. chirp',markersize=2)
+	#subplot.set_title(title)
+	subplot.axhline(y=50 ,linewidth=1,c='black',zorder=0)
+	subplot.axhline(y=100,linewidth=1,c='black',zorder=0)
+	subplot.axhline(y=200,linewidth=1,c='black',zorder=0)
+	subplot.set_ylabel('t_gap_i [ms]')#, color='g',drawstyle='dotted')
 	subplot.legend(loc=2)
 	subplot.grid(True)
 	return
 
+def plotTGapZoom(subplot,streamdata,title,how=HOW):
+	if how==TYPE_TRX:     subplot.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['t_gap_i_s']*1000,'g.', label='t_gap_i vs. trx'  ,markersize=2)
+	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['t_gap_i_s']*1000,'g.', label='t_gap_i vs. ttx'  ,markersize=2)
+	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,streamdata['t_gap_i_s']*1000,'g.', label='t_gap_i vs. chirp',markersize=2)
+	#subplot.set_title(title)
+	subplot.axhline(y=50 ,linewidth=1,c='black',zorder=0)
+	subplot.axhline(y=100,linewidth=1,c='black',zorder=0)
+	subplot.axhline(y=200,linewidth=1,c='black',zorder=0)
+	subplot.axis(ymin=0,ymax=500)
+	subplot.set_ylabel('t_gap_i [ms]')#, color='g',drawstyle='dotted')
+	subplot.legend(loc=2)
+	subplot.grid(True)
+	return	
+
 def plotIndividualPacketDelays(subplot,mReceiverRawData,title,how=HOW):
 	delay = (mReceiverRawData['trxns'] - mReceiverRawData['ttxns'])/BILLION
-	if how==TYPE_TRX:     subplot.plot( normalize(mReceiverRawData['trxns'])/BILLION ,delay,'r.', label='PacketDelays vs. trx')
-	elif how==TYPE_TTX:   subplot.plot( normalize(mReceiverRawData['ttxns'])/BILLION ,delay,'r.', label='PacketDelays vs. ttx')
-	elif how==TYPE_CHIRP: subplot.plot(          (mReceiverRawData['Chirp']       )  ,delay,'r.', label='PacketDelays vs. chirp')
+	if how==TYPE_TRX:     subplot.plot( normalize(mReceiverRawData['trxns'])/BILLION ,delay,'r.', label='Packetdelays vs. trx'  ,markersize=2)
+	elif how==TYPE_TTX:   subplot.plot( normalize(mReceiverRawData['ttxns'])/BILLION ,delay,'r.', label='Packetdelays vs. ttx'  ,markersize=2)
+	elif how==TYPE_CHIRP: subplot.plot(          (mReceiverRawData['Chirp']       )  ,delay,'r.', label='Packetdelays vs. chirp',markersize=2)
 	
-	subplot.set_ylabel('Packetdelays [ms]')
+	subplot.set_ylabel('Packetdelays [ms]', color='r')
+	subplot.set_xlabel('Number of the chirp')
 	# subplot.annotate('what happened here?', xy=(194.24, 2.1), xytext=(194, 5),
 	#             arrowprops=dict(facecolor='black', shrink=0.05))
 	subplot.legend(loc=2)
@@ -88,18 +111,19 @@ def plotSendingRate(subplot,streamdata,title,how=HOW,measurementIntervalMs=200.0
 	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,sendrate/1000.0,'g', label='Sending rate vs. ttx'  ,drawstyle='steps-post')
 	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,sendrate/1000.0,'g', label='Sending rate vs. chirp',drawstyle='steps-post')
 	#subplot.set_title(title)
-	subplot.set_ylabel('Data rate [KByte/s]')
+	subplot.set_ylabel('Data rate [KByte/s]', color='g')
 	subplot.legend(loc=2)
 	subplot.grid(True)
 	return
 
 
 def plotNumberOfSendPackets(subplot,streamdata,title, how=HOW):
-	if how==TYPE_TRX:     subplot.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['send'],'g', label='Sending packets vs. trx'  ,drawstyle='steps-post')
-	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['send'],'g', label='Sending packets vs. ttx'  ,drawstyle='steps-post')
-	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,streamdata['send'],'g', label='Sending packets vs. chirp',drawstyle='steps-post')
+	if how==TYPE_TRX:     subplot.plot( normalize(streamdata['first_trx_ns'])/BILLION ,streamdata['send'],'g', label='Packets sent vs. trx'  ,drawstyle='steps-post',linewidth=1)
+	elif how==TYPE_TTX:   subplot.plot( normalize(streamdata['first_ttx_ns'])/BILLION ,streamdata['send'],'g', label='Packets sent vs. ttx'  ,drawstyle='steps-post',linewidth=1)
+	elif how==TYPE_CHIRP: subplot.plot(          (streamdata['chirp']       )         ,streamdata['send'],'g', label='Packets sent vs. chirp',drawstyle='steps-post',linewidth=1)
 	#subplot.set_title(title)
-	subplot.set_ylabel('Number of send packets')
+	subplot.set_ylabel('Number of packets sent', color='g')
+	subplot.set_xlabel('Number of the chirp')
 	subplot.legend(loc=1)
 	subplot.grid(True)
 	return
@@ -123,7 +147,7 @@ def setXlim(subplots,how=HOW):
 	for s in sub:
 		s.set_xlim( [minx,maxx])
 
-def multiplot(directory,DEBUG=False,RECALC=False):
+def multiplot(directory,DEBUG=False,RECALC=False,DPI=300):
 	logs = bothlogs.BothLogs(directory,DEBUG)
 	if RECALC: 
 		logs.recalcAllStreamData()
@@ -135,31 +159,59 @@ def multiplot(directory,DEBUG=False,RECALC=False):
 	fig.tight_layout()   # get smaller borders
 	fig.suptitle('Downstream measurement '+logs.directory, fontsize=14, fontweight='bold')
 	streamdata = logs.client.getStreamData(logs.server)
-	plt.subplots_adjust(left=0.05, right=0.95, top=0.94, bottom=0.04,wspace=0.05,hspace=0.04)
+	plt.subplots_adjust(left=0.08, right=0.93, top=0.95, bottom=0.05,wspace=0.05,hspace=0.08) #for 10x10 inch
+	#plt.subplots_adjust(left=0.06, right=0.95, top=0.96, bottom=0.04,wspace=0.05,hspace=0.07) #fuer 12x12 inch
 	#plotReceivedDatarateViaBackChannel(sub[0],logs.server.getmReceiverRawData(),'Downstream data rate via backchannel')
 	plotDatarateAndLossrate(sub[0],streamdata , 'Downstream data rate and loss rate')
-	plotSendingRate(sub[0],streamdata,'Downstream sending rate')
+	#plotSendingRate(sub[0],streamdata,'Downstream sending rate')
 	plotDelay(sub[1],streamdata , 'Downstream delay')
 	plotTGap(sub[2],streamdata , 'Downstream t_gap_i')
 	#plotTtxFirst(sub[2].twinx(),streamdata , 'TTX First')
 	plotIndividualPacketDelays(sub[3], logs.client.getmReceiverRawData(),' Downstream individual packet delays')
 	plotNumberOfSendPackets(sub[3].twinx(), streamdata,'Downstream send packets')
+	fig.savefig("downstream-"+str(DPI)+"DPI.png",dpi=DPI)
+	fig.savefig("downstream-"+str(DPI)+"DPI.jpeg",dpi=DPI)
+	#fig.savefig("downstream-"+str(int(DPI))+"-"+str(int(size[0]*DPI))+"x"+str(int(size[1]*DPI))+".png",dpi=80,orientation='portrait',papertype='a4',bbox_inches=None,format='png')
+
+	zoom, sub = plt.subplots(1)
+	zoom.tight_layout()   # get smaller borders
+	plt.subplots_adjust(left=0.08, right=0.93, top=0.92, bottom=0.05,wspace=0.05,hspace=0.08) #for 10x10 inch
+	zoom.suptitle('Downstram t_gap_i zoom '+logs.directory, fontsize=14, fontweight='bold')
+	zoom.set_size_inches(10, 5)
+	plotTGapZoom(sub,streamdata , 'Downstream t_gap_i')
+	zoom.savefig("tgap-zoom-downstream-"+str(DPI)+"DPI.png",dpi=DPI)
+	zoom.savefig("tgap-zoom-downstream-"+str(DPI)+"DPI.jpeg",dpi=DPI)
 
 	#upstream
 	fig2, sub = plt.subplots(4, sharex=True)
-	fig2.tight_layout()   # get smaller borders
+	fig2.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)   # get smaller borders
 	fig2.suptitle('Upstream measurement '+logs.directory, fontsize=14, fontweight='bold')
 	streamdata = logs.server.getStreamData(logs.client)
-	plt.subplots_adjust(left=0.05, right=0.95, top=0.94, bottom=0.04,wspace=0.05,hspace=0.04)
+	plt.subplots_adjust(left=0.08, right=0.93, top=0.95, bottom=0.05,wspace=0.05,hspace=0.08) #for 10x10 inch
+	#plt.subplots_adjust(left=0.06, right=0.95, top=0.96, bottom=0.04,wspace=0.05,hspace=0.07) #fuer 12x12 inch
 	#plotReceivedDatarateViaBackChannel(sub[0],logs.client.getmReceiverRawData(),'Upstream data rate via backchannel')
 	plotDatarateAndLossrate(sub[0],streamdata , 'Upstream data rate and loss rate')
-	plotSendingRate(sub[0],streamdata,'Downstream sending rate')
+	#plotSendingRate(sub[0],streamdata,'Downstream sending rate')
 	plotDelay(sub[1],streamdata , 'Upstream delay')
 	plotTGap(sub[2],streamdata , 'Upstream t_gap_i')
 	#plotTtxFirst(sub[2].twinx(),streamdata , 'TTX First')
 	plotIndividualPacketDelays(sub[3], logs.server.getmReceiverRawData(),'Upstream individual packet delays')
 	plotNumberOfSendPackets(sub[3].twinx(), streamdata,'Upstream send packets')
+	fig2.savefig("upstream-"+str(DPI)+"DPI.png",dpi=DPI)
+	fig2.savefig("upstream-"+str(DPI)+"DPI.jpeg",dpi=DPI)
+	
+	zoom2, sub = plt.subplots(1)
+	zoom2.tight_layout()   # get smaller borders
+	plt.subplots_adjust(left=0.08, right=0.93, top=0.92, bottom=0.05,wspace=0.05,hspace=0.08) #for 10x10 inch
+	zoom2.suptitle('Upstream t_gap_i zoom '+logs.directory, fontsize=14, fontweight='bold')
+	zoom2.set_size_inches(10, 5)
+	plotTGapZoom(sub,streamdata , 'Upstream t_gap_i')
+	zoom2.savefig("tgap-zoom-upstream-"+str(DPI)+"DPI.png",dpi=DPI)
+	zoom2.savefig("tgap-zoom-upstream-"+str(DPI)+"DPI.jpeg",dpi=DPI)
+
 	plt.grid()
+
+
 
 
 
@@ -455,14 +507,17 @@ def usage():
 	print "        -i inputdirectory with rmf logs (can be used multiple times)"
 	print "        -r recalc everything"
 	print "        -d use default directory as input"
+	print "        -x do not show plots"
 
 def main(argv):
 	directories=[]
 	recalcall = False
 	usedefault = False
+	showplots = True
+	extension = "jpeg"
 
 	try:
-		opts, args = getopt.getopt(argv,"hi:dr",["inputdir="])
+		opts, args = getopt.getopt(argv,"hi:drx",["inputdir="])
 	except getopt.GetoptError:
 		usage()
 		sys.exit(2)
@@ -476,9 +531,20 @@ def main(argv):
 			recalcall = True
 		elif opt == "-d":
 			usedefault = True
+		elif opt == "-x":
+			showplots = False
 	if usedefault:
 		directories=[]
-		directories.append(r'/home/goebel/rmf-logs-to-keep/x200t-mercury-h5321gw/20150904/215435') # D1 21mbit - great performance but one enourmous sending rate spike (with no impact) in the downstream plot
+		os.chdir('/home/goebel/rmf-logs-to-keep')
+		directories.append(r'x200t-mercury-h5321gw/20150907/075124');
+		directories.append(r'x200t-mercury-h5321gw/20150904/183536');
+		directories.append(r'x200t-mercury-h5321gw/20150904/215435');
+		directories.append(r'x200t-mercury-h5321gw/20150904/184349');
+		directories.append(r'x200t-mercury-h5321gw/20150903/090013');
+		directories.append(r'x200t-mercury-h5321gw/20150903/080121');
+		directories.append(r'x200t-mercury-h5321gw/20150828/073826');
+		directories.append(r'x200t-mercury-h5321gw/20150825/172937');
+		directories.append(r'x200t-mercury-h5321gw/20150907/072020');
 
 	print "Inputdirectories = ", directories
 	print "Recalcall = ",recalcall
@@ -487,9 +553,14 @@ def main(argv):
 
 	for directory in directories: 
 		print 'Generating plot for dir = '+directory
-		multiplot(directory,False,True)
+		pwd = os.getcwd()
+		multiplot(directory,False,recalcall,1000)
+		os.chdir(pwd)
+		plt.cla
+
 	#plt.ioff()
-	plt.show()
+	if showplots:
+		plt.show()
 	print "Finished"
 if __name__ == "__main__":
 	main(sys.argv[1:])
