@@ -193,10 +193,11 @@ class NodeLogs:
 		statistics.append(('run','direction','duration[s]',
 			'#packets','#packetloss','P(packetloss)',
 			'#chirps','#chirploss','P(chirploss)',
-			'#congested chirps','P(con)','#congestion phases',
+			'#congested chirps','P(con)','#congestion phases','avgconttx[ms]','avgconttxlong[ms]','avgcontrx[ms]','avgcontrxlong[ms]',
 			'mindely[ms]','maxdelay[ms]','avgdelay[ms]','r95delay[ms]',
-			'longest congestion[ms]','longest congestion start chirp'
-			,'#datarate valid','#datarate lost','#datarate invalid'))
+			'longest congestionTtx[ms]','longest congestionTtxLonger[ms]','longest congestion start chirp ttx',
+			'longest congestionTrx[ms]','longest congestionTrxLonger[ms]','longest congestion start chirp trx',
+			'#datarate valid','#datarate lost','#datarate invalid'))
 		firstofachirpindex = np.argmax(mReceiverRawData['Pack'] > 0)
 		sizeOfFirstPacket = mReceiverRawData['BytePacket'][0]
 		reverseOrder = mReceiverRawData[::-1]
@@ -215,11 +216,23 @@ class NodeLogs:
 		#congestion statistics
 		lastNotCongestedChirp = mReceiverRawData['Chirp'][0]
 		lastNotCongestedTtx = mReceiverRawData['ttxns'][0] #dummy for longest congestion phase calculation
-		longestCongestionPhaseLengthNs = 0 #dummy for longest congestion phase timespan
-		longestCongestionPhaseStartChirp = 0
+		lastNotCongestedTrx = mReceiverRawData['trxns'][0] #dummy for longest congestion phase calculation
+		firstCongestedChirp = mReceiverRawData['Chirp'][0]
+		firstCongestedTtx = mReceiverRawData['ttxns'][0] #dummy for longest congestion phase calculation
+		firstCongestedTrx = mReceiverRawData['trxns'][0] #dummy for longest congestion phase calculation
+		longestCongestionPhaseLengthTtxNs = 0 #dummy for longest congestion phase timespan
+		longestCongestionPhaseLengthTtxLongerNs = 0 #dummy for longest congestion phase timespan
+		longestCongestionPhaseLengthTrxNs = 0 #dummy for longest congestion phase timespan
+		longestCongestionPhaseLengthTrxLongerNs = 0 #dummy for longest congestion phase timespan
+		longestCongestionPhaseTtxStartChirp = 0
+		longestCongestionPhaseTrxStartChirp = 0
 		currentlyInCongestion = False
 		congestionPhases = 0
 		chirps_congested = 0
+		cummulativeCongestionLengthTrxNs = 0
+		cummulativeCongestionLengthTrxLongerNs = 0
+		cummulativeCongestionLengthTtxNs = 0
+		cummulativeCongestionLengthTtxLongerNs = 0
 
 		#number of chirps
 		chirps_send = maxChirp #this is not exactly correct if complete chirps are lost at the end of the measurement
@@ -313,17 +326,30 @@ class NodeLogs:
 
 					#check t_gap_i before using delay!
 					if t_gap_i >= T_GUARD:
-						if firstPacket['Pack'] <=5: 
+						if currentlyInCongestion:
+							#this is the end of the congestion
+							conlengthTrxNs = firstPacket['trxns'] - firstCongestedTrx
+							conlengthTrxLongerNs = firstPacket['trxns'] - lastNotCongestedTrx
+							conlengthTtxNs = firstPacket['ttxns'] - firstCongestedTtx
+							conlengthTtxLongerNs = firstPacket['ttxns'] - lastNotCongestedTtx
+							cummulativeCongestionLengthTrxNs += firstPacket['trxns'] - firstCongestedTrx
+							cummulativeCongestionLengthTrxLongerNs += firstPacket['trxns'] - lastNotCongestedTrx
+							cummulativeCongestionLengthTtxNs += firstPacket['ttxns'] - firstCongestedTtx
+							cummulativeCongestionLengthTtxLongerNs += firstPacket['ttxns'] - lastNotCongestedTtx
+							if conlengthTtxNs > longestCongestionPhaseLengthTtxNs: 
+								longestCongestionPhaseLengthTtxNs = conlengthTtxNs
+								longestCongestionPhaseLengthTtxLongerNs = conlengthTtxLongerNs
+								longestCongestionPhaseTtxStartChirp = firstCongestedChirp
+							if conlengthTrxNs > longestCongestionPhaseLengthTrxNs: 
+								longestCongestionPhaseLengthTrxNs = conlengthTrxNs
+								longestCongestionPhaseLengthTrxLongerNs = conlengthTrxLongerNs
+								longestCongestionPhaseTrxStartChirp = firstCongestedChirp
+						lastNotCongestedTtx = firstPacket['ttxns']
+						lastNotCongestedTrx = firstPacket['trxns']
+						lastNotCongestedChirp = firstPacket['Chirp']
+						currentlyInCongestion=False
+						if firstPacket['Pack'] <=2:  #use only the first two packets of a chirp for delay measurements
 							delay_ns = float(firstPacket['trxns'] - firstPacket['ttxns'])/1000000000.0				#the delay of the first received packet of the chirp is usable
-							if currentlyInCongestion:
-								#this is the end of the congestion
-								conlengthNs = firstPacket['trxns'] - lastNotCongestedTtx
-								if conlengthNs > longestCongestionPhaseLengthNs: 
-									longestCongestionPhaseLengthNs = conlengthNs
-									longestCongestionPhaseStartChirp = lastNotCongestedChirp
-							lastNotCongestedTtx = firstPacket['ttxns']
-							lastNotCongestedChirp = firstPacket['Chirp']
-							currentlyInCongestion=False
 						else:
 							#special case where we can not really decide if a congestion starts or ends here so we ignore it for congestion calculations
 							delay_ns = float('nan')																	#the delay of the first received packet of the chirp is unusable	
@@ -339,12 +365,23 @@ class NodeLogs:
 						if not currentlyInCongestion:
 							currentlyInCongestion = True
 							congestionPhases+=1
+							firstCongestedChirp = firstPacket['Chirp']
+							firstCongestedTrx = firstPacket['trxns']
+							firstCongestedTtx = firstPacket['ttxns']
 						else: 
 							#count it - maybe we do not leave the congestion phase before the measurement ends
-							conlengthNs = firstPacket['trxns'] - lastNotCongestedTtx
-							if conlengthNs > longestCongestionPhaseLengthNs: 
-								longestCongestionPhaseLengthNs = conlengthNs
-								longestCongestionPhaseStartChirp = lastNotCongestedChirp
+							conlengthTrxNs = firstPacket['trxns'] - firstCongestedTrx
+							conlengthTrxLongerNs = firstPacket['trxns'] - lastNotCongestedTrx
+							conlengthTtxNs = firstPacket['ttxns'] - firstCongestedTtx
+							conlengthTtxLongerNs = firstPacket['ttxns'] - lastNotCongestedTtx
+							if conlengthTtxNs > longestCongestionPhaseLengthTtxNs: 
+								longestCongestionPhaseLengthTtxNs = conlengthTtxNs
+								longestCongestionPhaseLengthTtxLongerNs = conlengthTtxLongerNs
+								longestCongestionPhaseTtxStartChirp = firstCongestedChirp
+							if conlengthTrxNs > longestCongestionPhaseLengthTrxNs: 
+								longestCongestionPhaseLengthTrxNs = conlengthTrxNs
+								longestCongestionPhaseLengthTrxLongerNs = conlengthTrxLongerNs
+								longestCongestionPhaseTrxStartChirp = firstCongestedChirp
 
 					if arrivedOnce >=2: 
 						deltatrx_s = (int(lastPacket['trxns']) - int(firstPacket['trxns']))/1000000000.0
@@ -371,6 +408,10 @@ class NodeLogs:
 		packet_loss_probability = packets_lost*100.0/packets_send
 		congestion_probability = chirps_congested * 100.0 / chirps_send
 		chirp_loss_probability = chirps_lost * 100.0 / chirps_send
+		avgCongestionLengthTtxNs       = cummulativeCongestionLengthTtxNs / congestionPhases
+		avgCongestionLengthTtxLongerNs = cummulativeCongestionLengthTtxLongerNs / congestionPhases
+		avgCongestionLengthTrxNs       = cummulativeCongestionLengthTrxNs / congestionPhases
+		avgCongestionLengthTrxLongerNs = cummulativeCongestionLengthTrxLongerNs / congestionPhases
 
 		# statistics.append(('run','direction','duration[s]',
 		# 	'#packets','#packetloss','P(packetloss)',
@@ -379,12 +420,13 @@ class NodeLogs:
 		# 	'mindely[ms]','maxdelay[ms]','avgdelay[ms]','r95delay[ms]',
 		# 	'longest congestion[ms]','longest congestion start chirp'
 		# 	,'#datarate valid','#datarate lost','#datarate invalid'))
-		statistics.append((self.directory, self.direction, duration/1E9, 
-			packets_send, packets_lost, packet_loss_probability, 
-			chirps_send, chirps_lost, chirp_loss_probability, 
-			chirps_congested, congestion_probability, congestionPhases, 
-			mindelay/1E6, maxdelay/1E6, avgdelay/1E6, r95delay/1E6, 
-			longestCongestionPhaseLengthNs/1E6,longestCongestionPhaseStartChirp,
+		statistics.append((self.directory, self.direction, int(round(duration/1E9)), 
+			packets_send, packets_lost, round(packet_loss_probability,2), 
+			chirps_send, chirps_lost, round(chirp_loss_probability,2), 
+			chirps_congested, round(congestion_probability,2), congestionPhases, int(round(avgCongestionLengthTtxNs/1E6)),int(round(avgCongestionLengthTtxLongerNs/1E6)), int(round(avgCongestionLengthTrxNs/1E6)),int(round(avgCongestionLengthTrxLongerNs/1E6)),
+			int(round(mindelay/1E6)), int(round(maxdelay/1E6)), int(round(avgdelay/1E6)), int(round(r95delay/1E6)), 
+			int(round(longestCongestionPhaseLengthTtxNs/1E6)),int(round(longestCongestionPhaseLengthTtxLongerNs/1E6)),longestCongestionPhaseTtxStartChirp,
+			int(round(longestCongestionPhaseLengthTrxNs/1E6)),int(round(longestCongestionPhaseLengthTrxLongerNs/1E6)),longestCongestionPhaseTrxStartChirp,
 			datarate_valid, datarate_lost, datarate_invalid) )                                                                                                                      
 
 		print statistics

@@ -88,7 +88,7 @@ def plotTGapZoom(subplot,streamdata,title,how=HOW):
 	subplot.set_ylabel('t_gap_i [ms]')#, color='g',drawstyle='dotted')
 	subplot.legend(loc=2)
 	subplot.grid(True)
-	return	
+	return  
 
 def plotIndividualPacketDelays(subplot,mReceiverRawData,title,how=HOW):
 	delay = (mReceiverRawData['trxns'] - mReceiverRawData['ttxns'])/BILLION
@@ -508,6 +508,7 @@ def usage():
 	print "        -r recalc everything"
 	print "        -d use default directory as input"
 	print "        -x do not show plots"
+	print "        -c concat stats.csv to a single csv"
 
 def main(argv):
 	directories=[]
@@ -515,9 +516,10 @@ def main(argv):
 	usedefault = False
 	showplots = True
 	extension = "jpeg"
+	concatStats = False
 
 	try:
-		opts, args = getopt.getopt(argv,"hi:drx",["inputdir="])
+		opts, args = getopt.getopt(argv,"hi:drxc",["inputdir="])
 	except getopt.GetoptError:
 		usage()
 		sys.exit(2)
@@ -533,34 +535,48 @@ def main(argv):
 			usedefault = True
 		elif opt == "-x":
 			showplots = False
+			plt.hold(False) #do not reserve space for plots if we just want to save them to file
+		elif opt == "-c":
+			concatStats = True
 	if usedefault:
 		directories=[]
 		os.chdir('/home/goebel/rmf-logs-to-keep')
-		directories.append(r'x200t-mercury-h5321gw/20150907/075124');
+		directories.append(r'x200t-mercury-h5321gw/20150825/172937');
+		directories.append(r'x200t-mercury-h5321gw/20150828/073826');
+		directories.append(r'x200t-mercury-h5321gw/20150903/080121');
+		directories.append(r'x200t-mercury-h5321gw/20150903/090013');
 		directories.append(r'x200t-mercury-h5321gw/20150904/183536');
 		directories.append(r'x200t-mercury-h5321gw/20150904/215435');
 		directories.append(r'x200t-mercury-h5321gw/20150904/184349');
-		directories.append(r'x200t-mercury-h5321gw/20150903/090013');
-		directories.append(r'x200t-mercury-h5321gw/20150903/080121');
-		directories.append(r'x200t-mercury-h5321gw/20150828/073826');
-		directories.append(r'x200t-mercury-h5321gw/20150825/172937');
 		directories.append(r'x200t-mercury-h5321gw/20150907/072020');
+		directories.append(r'x200t-mercury-h5321gw/20150907/075124');
 
 	print "Inputdirectories = ", directories
 	print "Recalcall = ",recalcall
 	print "usedfault = ", usedefault
 	print "\n"
 
-	for directory in directories: 
-		print 'Generating plot for dir = '+directory
-		pwd = os.getcwd()
-		multiplot(directory,False,recalcall,1000)
-		os.chdir(pwd)
-		plt.cla
+	if concatStats:
+		print "contatenating stats files only"
+		print "pwd = "+os.getcwd()
+		with open('concat-stats.csv', 'w') as outfile:
+			for directory in directories:
+				with open(r""+directory+"/upstream-stats.csv") as infile:
+					outfile.write(infile.read())
+				with open(r""+directory+"/downstream-stats.csv") as infile:
+					outfile.write(infile.read())
+	else:
+		for directory in directories: 
+			print 'Generating plot for dir = '+directory
+			pwd = os.getcwd()
+			multiplot(directory,False,recalcall,1000)
+			multiplot(directory,False,False,300)
+			os.chdir(pwd)
+			plt.cla
 
-	#plt.ioff()
 	if showplots:
 		plt.show()
+
 	print "Finished"
 if __name__ == "__main__":
 	main(sys.argv[1:])
